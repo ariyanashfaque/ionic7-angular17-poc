@@ -1,0 +1,60 @@
+<ion-header [translucent]="true"> </ion-header>
+
+<ion-content [fullscreen]="true">
+  @defer (when !isLoading) {
+  <ion-list>
+    @for(movie of moviesResults; track movie.id){
+    <ion-item button [routerLink]="['/details', movie.id]">
+      <ion-avatar slot="start">
+        <ion-img [src]="imageUrl + movie.poster_path"></ion-img>
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ movie.original_title }}</h2>
+        <p>{{ movie.release_date | date: "y" }}</p>
+      </ion-label>
+      <ion-badge color="primary" mode="ios">
+        {{ movie.vote_average.toFixed(1) }}
+      </ion-badge>
+    </ion-item>
+    }@empty { @if(!isLoading){
+    <ion-item button>
+      <ion-label class="ion-text-center">
+        <h2>No movie Found</h2>
+      </ion-label>
+    </ion-item>
+    } }
+  </ion-list>
+
+  <ion-infinite-scroll
+    threshold="25%"
+    position="bottom"
+    (ionInfinite)="loadMoreMovies($event)"
+  >
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more data..."
+    >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  }@placeholder {
+  <ion-list>
+    @for(text of skeletonTexts; track text) {
+    <ion-item lines="none" class="ion-padding">
+      <ion-avatar slot="start">
+        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+      </ion-avatar>
+      <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+    </ion-item>
+    }
+  </ion-list>
+  }@error {
+  <ion-alert
+    isOpen="true"
+    header="Error"
+    [message]="error"
+    [buttons]="['Ok']"
+  ></ion-alert>
+  } @loading(minimum 2s) {
+  <ion-label class="ion-text-center">Almost there !!</ion-label>
+  }
+</ion-content>

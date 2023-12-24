@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ movieDetails()?.original_title }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @if(movieDetails(); as movie){
+  <ion-card>
+    <div
+      [style.height.px]="500"
+      [style.background-image]="'url(' + imageUrl + movie.poster_path + ')'"
+    ></div>
+    <ion-card-header>
+      <ion-title>{{ movieDetails()?.original_title }}</ion-title>
+    </ion-card-header>
+  </ion-card>
+  }@else {
+  <ion-card>
+    <ion-card-header>
+      <ion-title>No movie details found</ion-title>
+    </ion-card-header>
+  </ion-card>
+  }
+</ion-content>
